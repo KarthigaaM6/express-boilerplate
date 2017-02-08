@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-export class Card extends React.Component {
+import {Card, Image} from 'semantic-ui-react';
+export class RestaurantCard extends React.Component {
   static defaultProps = {
     image: '',
     name: '',
@@ -15,15 +15,13 @@ export class Card extends React.Component {
       height: '200px'
     }
     return (
-      <div className="ui card">
-        <div className="image">
-          <img src={this.props.image} style={imageStyle}/>
-        </div>
-        <div className="content">
-          <a className="header">{this.props.name}</a>
-          <div className="description">{this.props.address}</div>
-        </div>
-      </div>
+      <Card>
+        <Image src={this.props.image} style={imageStyle}/>
+        <Card.Content>
+          <Card.Header>{this.props.name}</Card.Header>
+          <Card.Description>{this.props.address}</Card.Description>
+        </Card.Content>
+      </Card>
     )
   }
 }
