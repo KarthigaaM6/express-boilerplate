@@ -1,41 +1,41 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {ChildA, ChildB} from './components/children.jsx';
-import {GrandChild} from './components/grandchildren.jsx';
+import {SearchBox} from './components/searchbox.jsx';
+import {DisplayBox} from './components/displaybox.jsx';
 
 class MainComponent extends React.Component {
 		static defaultProps = {
-			name: 'vikramadithya'
+
 		}
     constructor() {
         super();
         this.state = {
-            surname: 'cholan'
+					jsonArray: []
         };
-				// this.changeSurName = this.changeSurName.bind(this)
+				this.getRestaurantData = this.getRestaurantData.bind(this);
     }
-    changeSurName(name) {
-				let s = {surname: name};
-				this.setState(s);
-
-        // this.setState({surname: 'chozhan'});
-    }
-		changeMethod(){
-			this.props.title = 'Title Changed';
+		getRestaurantData(id, cuisine) {
+			$.ajax({
+				url: `https://developers.zomato.com/api/v2.1/search?entity_id=${id}&entity_type=city&q=${cuisine}`,
+				type: 'GET',
+				beforeSend: function(request) {
+					request.setRequestHeader('user-key', '9351c23066e0ae833d7602c214e1ae98');
+				},
+				success: function(data) {
+					this.setState({
+						jsonArray: data.restaurants
+					})
+				}.bind(this)
+			});
 		}
     render() {
         return (
-            <div>
-								<h1>{this.props.title}</h1>
-								<button onClick={this.changeMethod.bind(this)}>Change Title</button>
-                <h2>Parent - {this.props.name} {this.state.surname}</h2>
-                <ChildA name='adithya karikala' surname={this.state.surname}/>
-                <ChildB name='arunmozhi varma' surname={this.state.surname}/>
-                <GrandChild  parentMethod={this.changeSurName.bind(this)} name='rajendra' surname={this.state.surname}/>
-                {/* <button onClick={this.changeSurName.bind(this)}>Change Surname</button> */}
-            </div>
+					<div>
+						<SearchBox onSearch={this.getRestaurantData} />
+						<DisplayBox arr={this.state.jsonArray} />
+					</div>
         )
     }
 }
 ReactDOM.render(
-    <MainComponent name='parantaka' title='Title'/>, document.getElementById('mountapp'));
+    <MainComponent/>, document.getElementById('mountapp'));
