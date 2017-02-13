@@ -34,14 +34,12 @@ router.delete('/removeall', function(req, res) {
 router.put('/update', function(req, res) {
     logger.debug("inside restaurant update PUT");
     restaurantModel.findOneAndUpdate({
-        _id: Number(req.body.id)
+        _id: req.body.id
     }, {
         $set: {
-            name: req.body.name,
-            'address.0.city': req.body.city,
-            'address.0.state': req.body.state
+            comments: req.body.comments,
         }
-    }, function(err, users) {
+    }, function(err, restaurant) {
         if (err) {
             res.send('restaurant updation failed' + err);
         } else {
@@ -79,7 +77,6 @@ router.get('/display/:location', function(req, res) {
 
 router.get('/displayall', function(req, res) {
     console.log('inside restaurant display GET');
-    let state = (req.params.location).toLowerCase();
     restaurantModel.find({}, function(err, arr) {
         if (err) {
             res.send('restaurants cannot be fetched' + err);

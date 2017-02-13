@@ -1,41 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {SearchBox} from './components/searchbox.jsx';
-import {DisplayBox} from './components/displaybox.jsx';
+import {browserHistory, Route, Router, IndexRoute} from 'react-router';
+import {NavBar} from './components/NavBar';
+import {Home} from './components/home';
+import {Favorites} from './components/favorites';
 
-class MainComponent extends React.Component {
-		static defaultProps = {
-
-		}
-    constructor() {
-        super();
-        this.state = {
-					jsonArray: []
-        };
-				this.getRestaurantData = this.getRestaurantData.bind(this);
-    }
-		getRestaurantData(id, cuisine) {
-			$.ajax({
-				url: `https://developers.zomato.com/api/v2.1/search?entity_id=${id}&entity_type=city&q=${cuisine}`,
-				type: 'GET',
-				beforeSend: function(request) {
-					request.setRequestHeader('user-key', '9351c23066e0ae833d7602c214e1ae98');
-				},
-				success: function(data) {
-					this.setState({
-						jsonArray: data.restaurants
-					})
-				}.bind(this)
-			});
-		}
-    render() {
-        return (
-					<div>
-						<SearchBox onSearch={this.getRestaurantData} />
-						<DisplayBox arr={this.state.jsonArray} />
-					</div>
-        )
-    }
+class MainComp extends React.Component {
+  constructor(){
+    super();
+  }
+  render(){
+    return(
+      <div>
+        <NavBar/>
+        <br/><br/>
+        {this.props.children}
+      </div>
+    );
+  }
 }
+
 ReactDOM.render(
-    <MainComponent/>, document.getElementById('mountapp'));
+  <Router history={browserHistory}>
+    <Route path="/" component={MainComp}>
+      <Route path="/home" component={Home}/>
+      <Route path="/favorites" component={Favorites}/>
+    </Route>
+  </Router>, document.getElementById('app'));
