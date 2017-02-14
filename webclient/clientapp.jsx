@@ -4,6 +4,7 @@ import {browserHistory, Route, Router, IndexRoute} from 'react-router';
 import {NavBar} from './components/NavBar';
 import {Home} from './components/home';
 import {Favorites} from './components/favorites';
+import {LoginForm} from './components/login';
 
 class MainComp extends React.Component {
   constructor(){
@@ -22,7 +23,8 @@ class MainComp extends React.Component {
 
 ReactDOM.render(
   <Router history={browserHistory}>
-    <Route path="/" component={MainComp}>
+    <Route path="/" component={LoginForm}/>
+    <Route component={MainComp}>
       <Route path="/home" component={Home}/>
       <Route path="/favorites" component={Favorites}/>
     </Route>

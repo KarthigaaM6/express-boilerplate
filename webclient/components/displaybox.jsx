@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {RestaurantCard} from './card.jsx';
 
 export class DisplayBox extends React.Component {
@@ -15,36 +14,29 @@ export class DisplayBox extends React.Component {
       this.addComments = this.addComments.bind(this);
   }
   addToFav(item) {
-      console.log('displaybox add to fav...');
       $.ajax({
         url: 'http://localhost:8080/restaurants/add',
         type: 'POST',
         data: item,
         success: function(result) {
-          console.log(result);
         },
         error: function(err){
-          console.log(err);
         }
       });
   }
   unFav(id, index) {
-    console.log('displaybox unfav...');
     $.ajax({
       url: 'http://localhost:8080/restaurants/remove',
       type: 'DELETE',
-      data: id,
+      data: {id: id},
       success: function(result) {
         this.props.onParentCalled(index);
-        console.log(result);
       }.bind(this),
       error: function(err){
-        console.log(err);
       }
     });
   }
-  addComments(id, comments) {
-    console.log('displaybox add comments...');
+  addComments(id, comments, index) {
     $.ajax({
       url: 'http://localhost:8080/restaurants/update',
       type: 'PUT',
@@ -53,10 +45,9 @@ export class DisplayBox extends React.Component {
         comments: comments
       },
       success: function(result) {
-        console.log(result);
-      },
+        this.props.onParentCalled(index, comments);
+      }.bind(this),
       error: function(err){
-        console.log(err);
       }
     });
   }
@@ -119,6 +110,7 @@ export class DisplayBox extends React.Component {
             address={card.address}
             image={card.image}
             rating={card.rating}
+            comments={card.comments}
           />
         );
       });
@@ -130,4 +122,10 @@ export class DisplayBox extends React.Component {
       </div>
     );
   }
+}
+
+DisplayBox.propTypes = {
+  arr: React.PropTypes.array,
+  dataFrom: React.PropTypes.string,
+  onParentCalled: React.PropTypes.func
 }

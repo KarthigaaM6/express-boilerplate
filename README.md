@@ -14,7 +14,7 @@ Foodies is a personal hotel tracking app. It lets you find hotels that serve you
 
 - Sign up with [zomato](https://developers.zomato.com/api)
 - Generate an api key for you
-- Place the api key inside the [/webclient/zomato.jsx file](./webclient/zomato.jsx file)
+- Place the api key inside the [/webclient/zomato.jsx file](./webclient/zomato.jsx)
 
 ### How to start running
 Run these commands

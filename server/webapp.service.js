@@ -14,6 +14,8 @@ module.exports = function() {
 
   app = service.setupWebpack(app);
 
+  app = service.setupPassport(app);
+
   app = service.setupStaticRoutes(app);
 
   app = service.setupMiddlewares(app);

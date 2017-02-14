@@ -8,28 +8,28 @@ module.exports = {
    app: [
    'webpack/hot/dev-server',
     'webpack-hot-middleware/client?reload=true',
-    path.join(__dirname, "webclient", "clientapp.jsx")]
+    path.join(__dirname, 'webclient', 'clientapp.jsx')]
  },
  output: {
-   path: path.join(__dirname, "webclient", "dist"),
-   publicPath: "/dist/",
-   filename: "bundle.js"
+   path: path.join(__dirname, 'webclient', 'dist'),
+   publicPath: '/dist/',
+   filename: 'bundle.js'
  },
 
  module: {
      loaders: [{
                test: /\.jsx$/,
                loaders: [
-                            'react-hot','babel?presets[]=react,presets[]=es2015,presets[]=stage-1'
+                            'react-hot', 'babel?presets[]=react,presets[]=es2015,presets[]=stage-1'
                          ]
               },
               {
                 test: /\.css$/,
-                loader:"style-loader!css-loader",
-                include: [/flexboxgrid/,/react-select/]
+                loader: 'style-loader!css-loader',
+                include: [/flexboxgrid/, /react-select/]
               }]
  },
- watch:true,
+ watch: true,
  resolve: {
    extensions: ['', '.js', '.jsx', '/index.js', '/index.jsx']
  },

@@ -20,14 +20,12 @@ export class ActionBar extends React.Component {
       this.actionTwo = this.actionTwo.bind(this);
   }
   actionOne() {
-    console.log('actionbar action one...');
     this.props.onActionOne();
     this.setState({
       actionOneCompleted: true
     });
   }
   actionTwo() {
-    console.log('actionbar action two...');
     this.props.onActionTwo();
   }
   render() {
@@ -51,4 +49,12 @@ export class ActionBar extends React.Component {
       );
     }
   }
+}
+
+ActionBar.propTypes = {
+  actionOne: React.PropTypes.string,
+  actionTwo: React.PropTypes.string,
+  actionsFor: React.PropTypes.string,
+  onActionOne: React.PropTypes.func,
+  onActionTwo: React.PropTypes.func
 }

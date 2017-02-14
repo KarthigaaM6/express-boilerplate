@@ -5,9 +5,19 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const config = require('../config/');
 const logger = require('../applogger');
+const passport = require('../auth/passport');
+const connectflash = require('connect-flash');
 
 function createApp() {
   const app = express();
+  return app;
+}
+
+function setupPassport(app) {
+  app.use(require('express-session')({secret: 'accesskey'}));
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use(connectflash());
   return app;
 }
 
@@ -17,8 +27,8 @@ function setupStaticRoutes(app) {
 }
 
 function setupRestRoutes(app) {
-  console.log('Inside service setupRestRoutes');
   app.use('/users', require(path.join(__dirname, './users')));
+  app.use('/restaurants', require(path.join(__dirname, './restaurants')));
   //  MOUNT YOUR REST ROUTE HERE
   //  Eg:
 
@@ -53,10 +63,9 @@ function setupMiddlewares(app) {
   const compression = require('compression');
   app.use(compression());
 
-  app.use(function(req,res,next)
-  {
-    res.header('Access-Control-Allow-Origin',"*");
-    res.header('Access-Control-Allow-Method','GET,POST,PUT,DELETE');
+  app.use(function(req,res,next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Method', 'GET,POST,PUT,DELETE');
     res.header('Access-Control-Allow-Headers',
       'Origin, X-Requested-With, Content-Type, Accept, Authorization');
     next();
@@ -76,9 +85,20 @@ function setupWebpack(app) {
 
     app.use(webpackHotMiddleware(webpackCompiler));
     app.use(webpackDevMiddleware(webpackCompiler, {
-      noInfo: true,
-      publicPath: webpackConfig.output.publicPath
-    }));
+  noInfo: true,
+  publicPath: webpackConfig.output.publicPath,
+  stats: {
+      colors: true
+  },
+  watchOptions: {
+    aggregateTimeout: 300,
+    poll: 1000
+  }
+}));
+    // app.use(webpackDevMiddleware(webpackCompiler, {
+    //   noInfo: true,
+    //   publicPath: webpackConfig.output.publicPath
+    // }));
   }
   return app;
 }
@@ -115,5 +135,6 @@ module.exports = {
   setupRestRoutes: setupRestRoutes,
   setupMiddlewares: setupMiddlewares,
   setupMongooseConnections: setupMongooseConnections,
-  setupWebpack: setupWebpack
+  setupWebpack: setupWebpack,
+  setupPassport: setupPassport
 };

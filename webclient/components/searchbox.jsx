@@ -1,16 +1,13 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {Input, Icon, Button} from 'semantic-ui-react';
+import {Input, Button} from 'semantic-ui-react';
 
 export class SearchBox extends React.Component {
-  static defaultProps = {
-  }
   constructor() {
       super();
       this.state = {
         id: '',
         cuisine: ''
-      }
+      };
       this.onSearchClick = this.onSearchClick.bind(this);
       this.changeID = this.changeID.bind(this);
       this.changeCuisine = this.changeCuisine.bind(this);
@@ -28,18 +25,19 @@ export class SearchBox extends React.Component {
   onSearchClick() {
     let id = this.state.id;
     let cuisine = this.state.cuisine;
-    this.setState({
-      id: '',
-      cuisine: ''
-    });
-    this.props.onSearch(id, cuisine);
+    if(id.trim() === '' || cuisine.trim() === '') {
+      alert('ensure that u hav entered an id and a cuisine');
+    } else {
+      this.setState({
+        id: '',
+        cuisine: ''
+      });
+      this.props.onSearch(id, cuisine);
+    }
   }
   render() {
-    let divStyle = {
-      marginTop: '10px'
-    };
     return (
-      <div className='ui one column center aligned column grid position' style={divStyle}>
+      <div className='ui center aligned grid position'>
         <Input placeholder='city id...' onChange={this.changeID} value={this.state.id}/>
         <Input placeholder='cuisine...' onChange={this.changeCuisine} value={this.state.cuisine}/>
         <Button onClick={this.onSearchClick.bind(this)}>search</Button>

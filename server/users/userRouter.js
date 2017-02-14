@@ -2,7 +2,9 @@
 const logger = require('./../../applogger');
 const router = require('express').Router();
 const userModel = require('./userEntity');
+const passport = require('passport');
 //const userCtrl = require('./userController');
+const connectflash = require('connect-flash');
 
 // deleting a single user
 router.delete('/remove', function(req, res) {
@@ -80,6 +82,34 @@ router.get('/display/:username', function(req, res) {
             res.send(arr);
         }
     });
+});
+
+router.get('/display/:username', function(req, res) {
+    console.log('inside user display GET');
+    userModel.find({
+        name: req.params.username
+    }, function(err, arr) {
+        if (err) {
+            res.send('error in retrieving the user');
+        } else {
+            res.send(arr);
+        }
+    });
+});
+
+// login
+router.post('/login', passport.authenticate('local', {
+    failureFlash: 'Invalid Username and Password',
+    successFlash: "Welcome to Foodies App"
+}), function(req, res) {
+    res.json({responseText: 'authenticated'});
+});
+
+// logout
+router.get('/logout', function(req, res) {
+  console.log('Session deleted');
+  req.session.destroy();
+  res.send({redirect: '/'});
 });
 
 module.exports = router;
